@@ -1,0 +1,38 @@
+#Eclipse project files
+.metadata/
+.recommenders/
+.JETEmitters/
+.project
+.classpath
+.settings
+/tools/eclipse/
+
+#IntelliJ IDEA project files and directories
+*.iml
+*.ipr
+*.iws
+.idea/
+
+#Netbeans project files
+nb-configuration.xml
+nbactions.xml
+nbproject/
+
+#Geany project file
+.geany
+
+#KDevelop project file and directory
+.kdev4/
+*.kdev4
+
+#Build targets
+bin/
+target/
+instances/
+
+#Report directories
+/reports
+*/reports
+
+#Mac-specific directory that no other operating system needs.
+.DS_Store
