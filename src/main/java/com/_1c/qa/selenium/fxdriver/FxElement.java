@@ -97,6 +97,7 @@ public class FxElement implements WebElement, Locatable
                     if (Character.isLetterOrDigit(c) ||
                             Character.isSpaceChar(c) ||
                             Character.getType(c) == Character.CONNECTOR_PUNCTUATION ||
+                            Character.getType(c) == Character.DASH_PUNCTUATION ||
                             Character.getType(c) == Character.OTHER_PUNCTUATION)
                         letters.append(c);
                     else
