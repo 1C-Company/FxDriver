@@ -25,6 +25,8 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.scene.web.WebView;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
@@ -46,15 +48,17 @@ import static com._1c.qa.selenium.fxdriver.KeysCouple.convertToSeleniumKeys;
 
 public class FxElement implements WebElement, Locatable
 {
-    private Node node;
-    private IFxRobot robot;
-    private FxSearchContext context;
+    protected Node node;
+    protected IFxRobot robot;
+    protected FxSearchContext context;
 
     public FxElement(Node node, IFxRobot robot)
     {
         this.node = node;
         this.robot = robot;
-        this.context = new FxSearchContext(robot, node);
+        this.context = node instanceof WebView
+            ? new FxWebViewSearchContext(robot, node)
+            : new FxSearchContext(robot, node);
     }
 
     @Override

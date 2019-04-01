@@ -17,6 +17,8 @@ package com._1c.qa.selenium.fxdriver;
 
 import com._1c.qa.selenium.fxdriver.robot.IFxRobot;
 import javafx.scene.Node;
+import javafx.scene.web.WebView;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
@@ -32,8 +34,8 @@ import java.util.stream.Collectors;
 
 public class FxSearchContext implements SearchContext, FindsById, FindsByClassName, FindsByCssSelector
 {
-    private IFxRobot robot;
-    private Node root;
+    protected IFxRobot robot;
+    protected Node root;
 
     public FxSearchContext(IFxRobot robot)
     {
@@ -73,7 +75,7 @@ public class FxSearchContext implements SearchContext, FindsById, FindsByClassNa
         {
             Node node = NodeUtils.execute(() -> root.lookup("#" + id));
             if (node != null)
-                return new FxElement(node, robot);
+                return createWebElement(node);
         }
 
         throw new NoSuchElementException("Element with id '" + id + "' not found");
@@ -87,7 +89,7 @@ public class FxSearchContext implements SearchContext, FindsById, FindsByClassNa
         for (Node root : getRoots())
         {
             NodeUtils.execute(() -> root.lookupAll("#" + id).stream()
-                    .map(n -> new FxElement(n, robot))
+                    .map(this::createWebElement)
                     .forEach(elements::add));
 
         }
@@ -103,7 +105,7 @@ public class FxSearchContext implements SearchContext, FindsById, FindsByClassNa
             Node node = NodeUtils.execute(() -> root.lookup("." + className));
 
             if (node != null)
-                return new FxElement(node, robot);
+                return createWebElement(node);
         }
 
         throw new NoSuchElementException("Element with class '" + className + "' not found");
@@ -117,7 +119,7 @@ public class FxSearchContext implements SearchContext, FindsById, FindsByClassNa
         for (Node root : getRoots())
         {
             NodeUtils.execute(() -> root.lookupAll("." + className).stream()
-                    .map(n -> new FxElement(n, robot))
+                    .map(this::createWebElement)
                     .forEach(elements::add));
         }
 
@@ -132,7 +134,7 @@ public class FxSearchContext implements SearchContext, FindsById, FindsByClassNa
             Node node = NodeUtils.execute(() -> root.lookup(cssSelector));
 
             if (node != null)
-                return new FxElement(node, robot);
+                return createWebElement(node);
         }
 
         throw new NoSuchElementException("Element with selector '" + cssSelector + "' not found");
@@ -146,10 +148,18 @@ public class FxSearchContext implements SearchContext, FindsById, FindsByClassNa
         for (Node root : getRoots())
         {
             NodeUtils.execute(() -> root.lookupAll(cssSelector).stream()
-                    .map(n -> new FxElement(n, robot))
+                    .map(this::createWebElement)
                     .forEach(elements::add));
         }
 
         return elements;
+    }
+
+    private WebElement createWebElement(Node node)
+    {
+        if (node instanceof WebView)
+            return new FxWebViewElement(node, robot);
+        else
+            return new FxElement(node, robot);
     }
 }
