@@ -210,11 +210,15 @@ public class NodeUtils
         double width = scrollPane.getContent().getBoundsInLocal().getWidth();
         double height = scrollPane.getContent().getBoundsInLocal().getHeight();
 
-        double x = getBoundsInScroll(node, node.getBoundsInLocal()).getMaxX();
-        double y = getBoundsInScroll(node,node.getBoundsInLocal()).getMaxY();
+        Bounds boundsInScroll = getBoundsInScroll(node, node.getBoundsInLocal());
+        if (boundsInScroll != null)
+        {
+            double x = boundsInScroll.getMaxX();
+            double y = boundsInScroll.getMaxY();
 
-        scrollPane.setVvalue(y / height);
-        scrollPane.setHvalue(x / width);
+            scrollPane.setVvalue(y / height);
+            scrollPane.setHvalue(x / width);
+        }
 
         return node;
     }
